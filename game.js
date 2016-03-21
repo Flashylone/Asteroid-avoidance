@@ -30,6 +30,7 @@ $(document).ready(function(){
 		this.radius = radius;
 		this.vX = vX;
 	};
+
 	var Player = function(x,y){
 		this.x = x;
 		this.y = y;
@@ -46,26 +47,26 @@ $(document).ready(function(){
 		this.moveDown = false;
 
 		this.flameLength = 20;
-	}
+	};
 
 	function startGame(){
 		uiScore.html("0");
 		uiStats.show();
 
 		playGame = false;
-		asteroids = new Array();
+		asteroids = [];
 		numAsteroids = 10;
 		score = 0;
 
 		player = new Player(150,canvasHeight/2);
 
 		for(var i = 0;i < numAsteroids;i++){
-			var radius = 5 + (Math.random()*10);
-			var x = canvasWidth+radius+Math.floor(Math.random()*canvasWidth);
-			var y = Math.floor(Math.random()*canvasHeight);
-			var vX = -5-(Math.random()*5);
+			var radius = 5 + ( Math.random() * 10 );
+			var x = canvasWidth + radius + Math.floor( Math.random() * canvasWidth);
+			var y = Math.floor( Math.random() * canvasHeight );
+			var vX = -5-( Math.random() * 5 );
 
-			asteroids.push(new Asteroid(x,y,radius,vX));
+			asteroids.push(new Asteroid( x, y, radius, vX));
 		}
 
 		$(window).keydown(function(e){
@@ -75,17 +76,15 @@ $(document).ready(function(){
 				playGame = true;
 				animate();
 				timer();
-			};
+			}
 
 			if(keyCode == arrowRight){
 				player.moveRight = true;
 			}else if(keyCode == arrowUp){
 				player.moveUp = true;
 			}else if(keyCode == arrowDown){
-				//alert('1');
 				player.moveDown = true;
-				// alert(player.arrowDown);
-			};
+			}
 		});
 		$(window).keyup(function(e){
 			var keyCode = e.keyCode;
@@ -96,12 +95,11 @@ $(document).ready(function(){
 				player.moveUp = false;
 			}else if(keyCode == arrowDown){
 				player.moveDown = false;
-				//alert(player.)
-			};
+			}
 		});
 
 		animate();
-	};
+	}
 
 
 	function init(){
@@ -123,20 +121,19 @@ $(document).ready(function(){
 			$(window).unbind("keydown");
 			startGame();
 		});
-	};
+	}
 
 	function timer(){
 		if(playGame){
 			scoreTimeout = setTimeout(function(){
 				uiScore.html(++score);
-				if(score % 5 == 0){
+				if(score % 5 === 0){
 					numAsteroids += 5;
-					// console.log(numAsteroids);
 				}
 				timer();
 			},1000);
-		};
-	};
+		}
+	}
 
 	function animate(){
 		context.clearRect(0,0,canvasWidth,canvasHeight);
@@ -152,15 +149,13 @@ $(document).ready(function(){
 				tmpAsteroid.x = canvasWidth+tmpAsteroid.radius;
 				tmpAsteroid.y = Math.floor(Math.random()*canvasHeight);
 				tmpAsteroid.vX = -5-(Math.random()*5);
-			};
+			}
 
 			var dX = player.x - tmpAsteroid.x;
 			var dY = player.y - tmpAsteroid.y;
 			var distance = Math.sqrt((dX*dX)+(dY*dY));
-			// alert(distance);
 
 			if(distance < player.halfWidth+tmpAsteroid.radius){
-				// console.log(distance);
 				playGame = false;
 				clearTimeout(scoreTimeout);
 				uiStats.hide();
@@ -168,14 +163,17 @@ $(document).ready(function(){
 
 				$(window).unbind("keyup");
 				$(window).unbind("keydown");
-			};
+			}
 
-			context.fillStyle = "rgb(255,255,255)";
+			var r = Math.floor(Math.random() * 255);
+			var g = Math.floor(Math.random() * 255);
+			var b = Math.floor(Math.random() * 255);
+			context.fillStyle = "rgb(" + r + "," + g + "," + b +")";
 			context.beginPath();
 			context.arc(tmpAsteroid.x,tmpAsteroid.y,tmpAsteroid.radius,0,Math.PI*2,true);
 			context.closePath();
 			context.fill();
-		};
+		}
 
 		player.vX = 0;
 		player.vY = 0;
@@ -184,15 +182,15 @@ $(document).ready(function(){
 			player.vX = 3;
 		}else{
 			player.vX = -3;
-		};
+		}
 
 		if(player.moveUp){
 			player.vY = -3;
-		};
+		}
 
 		if(player.moveDown){
 			player.vY = 3;
-		};
+		}
 		player.x += player.vX;
 		player.y += player.vY;
 
@@ -216,7 +214,7 @@ $(document).ready(function(){
 				player.flameLength = 15;
 			}else{
 				player.flameLength = 20;
-			};
+			}
 
 			context.fillStyle = "orange";
 			context.beginPath();
@@ -227,7 +225,7 @@ $(document).ready(function(){
 			context.fill();
 
 			context.restore();
-		};
+		}
 
 		context.fillStyle = "rgb(255,0,0)";
 		context.beginPath();
@@ -248,7 +246,7 @@ $(document).ready(function(){
 
 		if(playGame){
 			setTimeout(animate,33);
-		};
+		}
 	}
 	init();
 });
